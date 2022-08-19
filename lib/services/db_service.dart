@@ -70,13 +70,12 @@ List<Map<String, dynamic>> activityData = [
     "address":"134 Mandad Street, Suite 64 10045",
 
   },
-
   {
     "id": "3",
     "title": "EarPods",
     "amount": "25.08",
     "head":"Apple Store",
-    "description":"eturn time remaining 3 days",
+    "description":"Return time remaining 3 days",
     "address":"184 Muttil Street, Suite 90 21455",
 
   },
@@ -151,5 +150,15 @@ class DatabaseConnectionProvider with ChangeNotifier {
     return data;
   }
 
+
+  ///Search field operation
+  TextEditingController _contr = TextEditingController();
+  TextEditingController get contr => _contr;
+
+  void onTextChange(String val){
+    data= data.where((element) => element["title"].toString().contains(val)).toList();
+    print(data);
+    notifyListeners();
+  }
 
 }

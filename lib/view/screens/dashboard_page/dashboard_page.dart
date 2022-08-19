@@ -45,11 +45,17 @@ class _DashboardPageState extends State<DashboardPage> {
     // Provider.of<DatabaseConnectionProvider>(context,
     //     listen: false)
     //     .getData();
+
   }
 
 
   @override
   Widget build(BuildContext context) {
+
+    var dbPro = Provider.of<DatabaseConnectionProvider>(
+      context,
+    );
+
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -162,7 +168,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 25, right: 25, top: 20),
-                            child: SearchField(fieldLabel: 'Search Transactions',),
+                            child: SearchField(fieldLabel: 'Search Transactions', selectionStatus: false, focusStatus: false,),
                           ),
                           kMinHeight,
 
@@ -173,12 +179,11 @@ class _DashboardPageState extends State<DashboardPage> {
                           kHeight,
 
                           ///Activities
+                          dbPro.contr.text.isEmpty ?
                           FutureBuilder(
-                            future: Provider.of<DatabaseConnectionProvider>(context, listen: false).getActivityData(),
+                            future: dbPro.getActivityData(),
                             builder: (BuildContext context, snapshot){
                               if (snapshot.hasData) {
-                                print(snapshot.data);
-                                print("future");
                                 List<Map<String, dynamic>> data =
                                 snapshot.data as List<Map<String, dynamic>>;
                                 print(data.length.toString() + "  length");
@@ -197,7 +202,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                 );
                               }
                             },
-                          )
+                          ) : ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: dbPro.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Activity(activityData: dbPro.data[index]);
+                              }),
+
                         ],
                       ),
                     ),
