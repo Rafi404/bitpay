@@ -1,4 +1,3 @@
-import 'package:bitpay/view/constants/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {

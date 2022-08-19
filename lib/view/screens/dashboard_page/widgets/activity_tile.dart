@@ -1,10 +1,12 @@
+import 'package:bitpay/model/activity_model.dart';
 import 'package:bitpay/view/constants/colors.dart';
 import 'package:bitpay/view/constants/gutters.dart';
 import 'package:bitpay/view/constants/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class Activity extends StatelessWidget {
-  const Activity({Key? key}) : super(key: key);
+  Map<String, dynamic>? activityData;
+  Activity({Key? key,this.activityData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +17,11 @@ class Activity extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Apple MacBook Pro 16' - Silver",
+              activityData!["title"].toString(),
               style: headStyle2,
             ),
             Text(
-              "\$3,234.03",
+              "\$ + ${activityData!["amount"].toString()}",
               style: headStyle1,
             ),
           ],
@@ -27,19 +29,19 @@ class Activity extends StatelessWidget {
         kHeight,
         kHeight,
         Text(
-          "Apple Store",
+          activityData!["head"].toString(),
           style: headStyle1,
         ),
         kHeight,
         kHeight,
         Text(
-          "Return Time Remaining 2 Weeks",
+          activityData!["description"].toString(),
           style: headStyle3,
         ),
         kHeight,
         kHeight,
         Text(
-          "1342 Colorado Street, Suite 32 - 92003",
+          activityData!["address"].toString(),
           style: headStyle3,
         ),
         kHeight,

@@ -9,6 +9,7 @@ import 'package:bitpay/view/screens/dashboard_page/widgets/avatar_with_name.dart
 import 'package:bitpay/view/screens/dashboard_page/widgets/balance_board.dart';
 import 'package:bitpay/view/screens/dashboard_page/widgets/search_field.dart';
 import 'package:bitpay/view/screens/profile_page/profile_page.dart';
+import 'package:bitpay/view/screens/widgets/activity_shimmer.dart';
 import 'package:bitpay/view/screens/widgets/avatar_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -31,10 +32,15 @@ class _DashboardPageState extends State<DashboardPage> {
     // Provider.of<DatabaseConnectionProvider>(context,
     //     listen: false)
     //     .setDatabase();
-
+    //
     // Provider.of<DatabaseConnectionProvider>(context,
     //     listen: false)
     //     .insertDatabase(contactsData);
+    //
+    // Provider.of<DatabaseConnectionProvider>(context,
+    //     listen: false)
+    //     .insertActivity(activityData);
+
 
     // Provider.of<DatabaseConnectionProvider>(context,
     //     listen: false)
@@ -85,7 +91,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     return ProfilePage();
                                   }));
                             },
-                            child: Avatar(avatarWidth: 60.0, avatarHeight: 60.0, avatarImage: avatarImage,)),
+                            child: Avatar(avatarWidth: 60.0, avatarHeight: 60.0, avatarImage: avatarImage.toString(),)),
                         kWidth,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,9 +173,31 @@ class _DashboardPageState extends State<DashboardPage> {
                           kHeight,
 
                           ///Activities
-                          Activity(),
-                          Activity(),
-                          Activity(),
+                          FutureBuilder(
+                            future: Provider.of<DatabaseConnectionProvider>(context, listen: false).getActivityData(),
+                            builder: (BuildContext context, snapshot){
+                              if (snapshot.hasData) {
+                                print(snapshot.data);
+                                print("future");
+                                List<Map<String, dynamic>> data =
+                                snapshot.data as List<Map<String, dynamic>>;
+                                print(data.length.toString() + "  length");
+                                return ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: data.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Activity(activityData:data[index]);
+                                    });
+                              }else{
+                                return Shimmer(
+                                  duration: Duration(seconds: 2),
+                                  interval: Duration(seconds: 1),
+                                  child: ActivityShimmer(),
+                                );
+                              }
+                            },
+                          )
                         ],
                       ),
                     ),
